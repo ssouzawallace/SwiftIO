@@ -16,7 +16,7 @@ public struct Mutex {
         mutex = swifthal_os_mutex_create()
     }
 
-    public func lock(_ timeout: Int = 0) {
+    public func lock(_ timeout: Int = -1) {
         swifthal_os_mutex_lock(mutex, Int32(timeout))
     }
 
@@ -43,11 +43,11 @@ public struct MessageQueue {
         swifthal_os_mq_destory(queue)
     }
 
-    public func send(data: UnsafeMutableRawPointer, timeout: Int = 0) {
+    public func send(data: UnsafeMutableRawPointer, timeout: Int = -1) {
         swifthal_os_mq_send(queue, data, Int32(timeout))
     }
 
-    public func receive(into data: UnsafeMutableRawPointer, timeout: Int = 0) {
+    public func receive(into data: UnsafeMutableRawPointer, timeout: Int = -1) {
         swifthal_os_mq_recv(queue, data, Int32(timeout))
     }
 
