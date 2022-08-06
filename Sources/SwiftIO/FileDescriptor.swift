@@ -193,6 +193,11 @@ public struct FileDescriptor {
         Int(swifthal_fs_seek(filePointer, Int32(offset), whence.rawValue))
     }
 
+    public func truncate(to size: Int) -> Int {
+        guard size >= 0 else { return -1 }
+        return Int(swifthal_fs_truncate(filePointer, UInt32(size)))
+    }
+
     /**
      Writes the contents of a string at the current file offset.
       - Parameter string: **REQUIRED** The string being written.
