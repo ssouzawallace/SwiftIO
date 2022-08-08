@@ -16,12 +16,18 @@ public struct Mutex {
         mutex = swifthal_os_mutex_create()
     }
 
-    public func lock(_ timeout: Int = -1) {
-        swifthal_os_mutex_lock(mutex, Int32(timeout))
+    @discardableResult
+    public func lock(_ timeout: Int = -1) -> Result<(), Errno> {
+        return nothingOrErrno(
+            swifthal_os_mutex_lock(mutex, Int32(timeout))
+        )
     }
 
-    public func unlock() {
-        swifthal_os_mutex_unlock(mutex)
+    @discardableResult
+    public func unlock() -> Result<(), Errno> {
+        return nothingOrErrno(
+            swifthal_os_mutex_unlock(mutex)
+        )
     }
 
     public func destroy() {
@@ -43,12 +49,18 @@ public struct MessageQueue {
         swifthal_os_mq_destory(queue)
     }
 
-    public func send(data: UnsafeMutableRawPointer, timeout: Int = -1) {
-        swifthal_os_mq_send(queue, data, Int32(timeout))
+    @discardableResult
+    public func send(data: UnsafeMutableRawPointer, timeout: Int = -1) -> Result<(), Errno> {
+        return nothingOrErrno(
+            swifthal_os_mq_send(queue, data, Int32(timeout))
+        )
     }
 
-    public func receive(into data: UnsafeMutableRawPointer, timeout: Int = -1) {
-        swifthal_os_mq_recv(queue, data, Int32(timeout))
+    @discardableResult
+    public func receive(into data: UnsafeMutableRawPointer, timeout: Int = -1) -> Result<(), Errno> {
+        return nothingOrErrno(
+            swifthal_os_mq_recv(queue, data, Int32(timeout))
+        )
     }
 
     // public func peek(into data: UnsafeMutableRawPointer) {
