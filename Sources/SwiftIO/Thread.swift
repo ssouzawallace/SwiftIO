@@ -1,7 +1,12 @@
 import CSwiftIO
 
-public func createThread(_ deadloop: @escaping swifthal_task, priority: Int) {
-    swifthal_os_task_create(deadloop, nil, nil, nil, Int32(priority))
+public func createThread(
+    name: String = "",
+    priority: Int,
+    stackSize: Int,
+    _ deadloop: @escaping swifthal_task) {
+        var cName = Array<CChar>(name.utf8CString)
+        swifthal_os_task_create(&cName, deadloop, nil, nil, nil, Int32(priority), Int32(stackSize))
 }
 
 public func yield() {
@@ -69,5 +74,37 @@ public struct MessageQueue {
 
     public func purge() {
         swifthal_os_mq_purge(queue)
+    }
+}
+
+
+
+public struct Semaphore {
+    let sem: UnsafeMutableRawPointer
+
+    public init(initialCount: Int = 0, maxCount: Int = 1) {
+        guard initialCount > 0 && maxCount >= 1 else {
+            fatalError("Semaphore initialCount must >= 0 and maxCount must >= 1")
+        }
+        sem = swifthal_os_sem_create(UInt32(initialCount), UInt32(maxCount))
+    }
+
+    @discardableResult
+    public func take(timeout: Int = -1) -> Result<(), Errno> {
+        return nothingOrErrno(
+            swifthal_os_sem_take(sem, Int32(timeout))
+        )
+    }
+
+    public func give() {
+        swifthal_os_sem_give(sem)
+    }
+
+    public func eset() {
+        swifthal_os_sem_reset(sem)
+    }
+
+    public func destroy() {
+        swifthal_os_sem_destroy(sem)
     }
 }

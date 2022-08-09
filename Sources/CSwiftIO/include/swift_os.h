@@ -1,16 +1,13 @@
-/*
- * @Copyright (c) 2020, MADMACHINE LIMITED
- * @Author: Andy Liu,Frank Li
- * @SPDX-License-Identifier: MIT
- */
+#ifndef _SWIFT_OS_H_
+#define _SWIFT_OS_H_
 
-
-#ifndef _SWIFT_THREAD_H_
-#define _SWIFT_THREAD_H_
 
 typedef void (*swifthal_task)(void *p1, void *p2, void *p3);
 
-void *swifthal_os_task_create(swifthal_task fn, void *p1, void *p2, void *p3, int prio);
+void *swifthal_os_task_create(const char *name,
+			      swifthal_task fn, void *p1, void *p2, void *p3,
+			      int prio,
+			      int stack_size);
 void swifthal_os_task_yield(void);
 
 void *swifthal_os_mq_create(int mq_size, int mq_num);
@@ -25,4 +22,10 @@ int swifthal_os_mutex_destroy(void *mutex);
 int swifthal_os_mutex_lock(void *mutex, int timeout);
 int swifthal_os_mutex_unlock(void *mutex);
 
-#endif /*_SWIFT_THREAD_H_*/
+void *swifthal_os_sem_create(unsigned int init_cnt, unsigned int limit);
+int swifthal_os_sem_destroy(void *sem);
+int swifthal_os_sem_take(void *sem, int timeout);
+int swifthal_os_sem_give(void *sem);
+int swifthal_os_sem_reset(void *sem);
+
+#endif /* _SWIFT_OS_H_ */
