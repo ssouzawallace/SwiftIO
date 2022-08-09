@@ -90,7 +90,7 @@ public struct Semaphore {
     }
 
     @discardableResult
-    public func take(timeout: Int = -1) -> Result<(), Errno> {
+    public func take(_ timeout: Int = -1) -> Result<(), Errno> {
         return nothingOrErrno(
             swifthal_os_sem_take(sem, Int32(timeout))
         )
