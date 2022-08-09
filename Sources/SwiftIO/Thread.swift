@@ -83,7 +83,7 @@ public struct Semaphore {
     let sem: UnsafeMutableRawPointer
 
     public init(initialCount: Int = 0, maxCount: Int = 1) {
-        guard initialCount > 0 && maxCount >= 1 else {
+        guard initialCount >= 0 && maxCount >= 1 else {
             fatalError("Semaphore initialCount must >= 0 and maxCount must >= 1")
         }
         sem = swifthal_os_sem_create(UInt32(initialCount), UInt32(maxCount))
