@@ -195,7 +195,7 @@ import CSwiftIO
         }
 
         if case .success = result {
-            result = nothingOrErrno(
+            result = valueOrErrno(
                 swifthal_i2s_write(obj, sample, Int32(writeLength), timeoutValue)
             )
         }
