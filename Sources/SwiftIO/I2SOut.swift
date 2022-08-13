@@ -183,25 +183,25 @@ import CSwiftIO
         count: Int? = nil,
         timeout: Int? = nil
     ) {
-        let length, timeoutValue: Int32
+        let timeoutValue: Int32
 
-        if let count = count {
-            length = Int32(min(count, sample.count))
-        } else {
-            length = Int32(sample.count)
-        }
+        var writeLength = 0
+        var result = validateLength(sample, count: count, length: &writeLength)
 
         if let timeout = timeout {
             timeoutValue = Int32(timeout)
         } else {
             timeoutValue = Int32(SWIFT_FOREVER)
         }
-        
-        let ret = swifthal_i2s_write(obj, sample, length, timeoutValue)
 
-        if ret != 0 {
-            print("I2SOut\(id) write error!")
+        if case .success = result {
+            result = nothingOrErrno(
+                swifthal_i2s_write(obj, sample, Int32(writeLength), timeoutValue)
+            )
         }
+        if case .failure(let err) = result {
+            print("error: \(self).\(#function) line \(#line) -> " + String(describing: err))
+        } 
     }
 
 }
