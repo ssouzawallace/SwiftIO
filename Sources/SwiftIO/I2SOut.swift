@@ -186,7 +186,7 @@ import CSwiftIO
         let timeoutValue: Int32
 
         var writeLength = 0
-        var result = validateLength(sample, count: count, length: &writeLength)
+        let lengthResult = validateLength(sample, count: count, length: &writeLength)
 
         if let timeout = timeout {
             timeoutValue = Int32(timeout)
@@ -194,7 +194,8 @@ import CSwiftIO
             timeoutValue = Int32(SWIFT_FOREVER)
         }
 
-        if case .success = result {
+        var result: Result<Int, Errno> = .success(0)
+        if case .success = lengthResult {
             result = valueOrErrno(
                 swifthal_i2s_write(obj, sample, Int32(writeLength), timeoutValue)
             )
