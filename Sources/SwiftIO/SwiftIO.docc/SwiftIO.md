@@ -46,5 +46,5 @@ while true {
 }
 ```
 
-BTW, if you are new to electronics, there are some [tutorials](https://docs.madmachine.io/tutorials/overview) for you to get started.
+BTW, if you are new to electronics, there are some [tutorials](https://docs.madmachine.io/) for you to get started.
 
